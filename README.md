@@ -1,2 +1,2 @@
-# fortune-teller
+# The Fool
 Tarot cards, crystal ball,...
