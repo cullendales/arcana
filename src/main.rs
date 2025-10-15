@@ -1,3 +1,5 @@
+use rand::Rng;
+
 const TAROT_CARDS: [&str; 78] = [
     "The Fool", 
     "The Magician", 
@@ -83,4 +85,16 @@ fn main(){
     println!("The first tarot card is: {}", TAROT_CARDS[0]);
     println!("The last tarot card is: {}", TAROT_CARDS[77]);
     println!("The length of the deck is: {}", TAROT_CARDS.len());
+
+    let mut cards = [0; 3];
+    for i in 0..3 {
+        let mut card = rand::thread_rng().gen_range(0..78);
+        while cards.contains(&card) {
+            card = rand::thread_rng().gen_range(0..78);
+        }
+        cards[i] = card;
+    }
+    for i in 0..3 {
+        println!("Here is the {} card: {}", i, cards[i]);
+    }
 }
