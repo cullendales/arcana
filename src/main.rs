@@ -1,4 +1,7 @@
 use rand::Rng;
+use std::error::Error;
+use std::fs::File;
+use std::path::Path;
 
 const TAROT_CARDS: [&str; 78] = [
     "The Fool", 
@@ -86,17 +89,33 @@ struct TarotCard {
     reversed: bool,
 }
 
+// fn display_tarot(card: TarotCard) {
+
+// }
+
 // fn interpret_patterns(cards){
 
 // }
 
-// fn gather_meaning(card: TarotCard) -> String {
-
+// fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: TarotCard) -> Result<(), Box<dyn Error>> {
+//     let tarot_file = File::open(tarot_file)?;
+//     let mut rdr = csv::Reader::from_reader(tarot_file);
+    
 // } 
 
-// fn display_tarot(card: TarotCard) {
-
-// }
+fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: &TarotCard) -> Result<(), Box<dyn Error>> {
+    let tarot_file = File::open(tarot_file)?;
+    let mut rdr = csv::Reader::from_reader(tarot_file);
+    for result in rdr.records() {
+        let record = result?;   
+        if record.get(0) == Some(&card.name) {
+            if let Some(value) = record.get(1) {
+                println!("{}", value);
+            }
+        }  
+    }
+    Ok(())
+}
 
 fn build_card(name: String, reversed: bool) -> TarotCard {
     TarotCard { name, reversed }
@@ -113,6 +132,7 @@ fn draw_card(drawn_cards: &[usize]) -> (TarotCard, usize) {
 }
 
 fn main(){
+    let tarot_file = "/Users/cullendales/Desktop/arcana/TarotCardsUpright.csv";
     let mut cards: Vec<TarotCard> = Vec::new();
     let mut drawn_cards = [0; 3];
     for i in 0..3 {
@@ -120,7 +140,9 @@ fn main(){
         drawn_cards[i] = tarot_index;
         cards.push(card);
     }
+
     for card in &cards {
         println!("{}{}", card.name, if card.reversed {" Reversed"} else {""});
+        let _ = gather_meaning(tarot_file, card);
     }
 }
