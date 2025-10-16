@@ -100,6 +100,10 @@ struct TarotCard {
     age: String,
 }
 
+fn build_card(name: String, reversed: bool, age: String) -> TarotCard {
+    TarotCard { name, reversed, age }
+}
+
 // prints out an image in terminal of the tarot card and flips the image if reversed is true
 fn display_tarot(card: &TarotCard) {
     let conf = Config {
@@ -124,10 +128,48 @@ fn display_tarot(card: &TarotCard) {
     }
 }
 
-// fn interpret_patterns(cards){
+// counts specific patterns found in users tarot cards and prints meaning
+fn interpret_patterns(cards: &Vec<TarotCard>){
+    let mut count_rev = 0;
+    let mut count_wnd = 0;
+    let mut count_swd = 0;
+    let mut count_pnt = 0;
+    let mut count_cup = 0;
+    for card in cards {
+        if card.reversed {
+            count_rev += 1
+        }
+        if card.name.contains("Wands"){
+            count_wnd += 1
+        }
+        if card.name.contains("Swords"){
+            count_swd += 1
+        }
+        if card.name.contains("Pentacles"){
+            count_pnt += 1
+        }
+        if card.name.contains("Cups"){
+            count_cup += 1
+        }
+    }
+    if count_rev > 1 {
+        println!("{} cards were reversed cards during this reading. Watch for blockages or delays.", count_rev);
+    }
+    if count_wnd > 1 {
+        println!("Wand cards were a theme during your reading. This is a sign of strong energy, creativity, and action.");
+    }
+    if count_swd > 1 {
+        println!("Sword cards were a theme during your reading. Mental clarity, conflict, or decision-making is highlighted.");
+    }
+    if count_pnt > 1 {
+        println!("Pentacle cards were a theme during your reading. This is a sign of career, finance, or material stability.");
+    }
+    if count_cup > 1 {
+        println!("Cup cards were a theme during your reading. Relationships, and intuition are prominent.");
+    }
+}
 
-// }
-
+// looks up meaning of specified card in csv file
 fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: &TarotCard) -> Result<(), Box<dyn Error>> {
     let tarot_file = File::open(tarot_file)?;
     let mut rdr = csv::Reader::from_reader(tarot_file);
@@ -143,10 +185,7 @@ fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: &TarotCard) -> Result<(),
     Ok(())
 }
 
-fn build_card(name: String, reversed: bool, age: String) -> TarotCard {
-    TarotCard { name, reversed, age }
-}
-
+// randomly selects a tarot card that hasn't been picked yet this run
 fn draw_card(drawn_cards: &[usize], age: &str) -> (TarotCard, usize) {
     let mut card_num = rand::rng().random_range(0..78);
     while drawn_cards.contains(&card_num) {
@@ -172,4 +211,5 @@ fn main(){
         println!("{}: {}{}", card.age, card.name, if card.reversed {" Reversed"} else {""});
         let _ = gather_meaning(tarot_file, card);
     }
+    interpret_patterns(&cards);
 }
