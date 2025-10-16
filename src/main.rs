@@ -95,6 +95,6 @@ fn main(){
         cards[i] = card;
     }
     for i in 0..3 {
-        println!("Here is the {} card: {}", i, cards[i]);
+        println!("Here is the {} card: {}", i+1, TAROT_CARDS[cards[i]]);
     }
 }
