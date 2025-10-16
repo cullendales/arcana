@@ -81,20 +81,32 @@ const TAROT_CARDS: [&str; 78] = [
     "King of Pentacles",
 ]; 
 
-fn main(){
-    println!("The first tarot card is: {}", TAROT_CARDS[0]);
-    println!("The last tarot card is: {}", TAROT_CARDS[77]);
-    println!("The length of the deck is: {}", TAROT_CARDS.len());
+struct TarotCard {
+    name: String,
+    reversed: bool,
+}
 
-    let mut cards = [0; 3];
+
+fn build_card(name: String, reversed: bool) -> TarotCard {
+    TarotCard { name, reversed }
+}
+
+
+fn main(){
+    let mut cards: Vec<TarotCard> = Vec::new();
+    let mut drawn_cards = [0; 3];
     for i in 0..3 {
-        let mut card = rand::thread_rng().gen_range(0..78);
-        while cards.contains(&card) {
-            card = rand::thread_rng().gen_range(0..78);
+        let mut card_num = rand::rng().random_range(0..78);
+        while drawn_cards.contains(&card_num) {
+            card_num = rand::rng().random_range(0..78);
         }
-        cards[i] = card;
+        drawn_cards[i] = card_num;
+        let is_reverse = rand::rng().random_range(0..2);
+        let reversed = is_reverse == 1;
+        let card = build_card(TAROT_CARDS[card_num].to_string(), reversed);
+        cards.push(card);
     }
-    for i in 0..3 {
-        println!("Here is the {} card: {}", i+1, TAROT_CARDS[cards[i]]);
+    for card in &cards {
+        println!("{} {}", if card.reversed {"Reversed"} else {"Upright"}, card.name);
     }
 }
