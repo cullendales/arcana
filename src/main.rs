@@ -84,9 +84,16 @@ const TAROT_CARDS: [&str; 78] = [
     "King of Pentacles",
 ]; 
 
+const AGE: [&str; 3] = [
+    "Past",
+    "Present",
+    "Future",
+];
+
 struct TarotCard {
     name: String,
     reversed: bool,
+    age: String,
 }
 
 // fn display_tarot(card: TarotCard) {
@@ -97,12 +104,7 @@ struct TarotCard {
 
 // }
 
-// fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: TarotCard) -> Result<(), Box<dyn Error>> {
-//     let tarot_file = File::open(tarot_file)?;
-//     let mut rdr = csv::Reader::from_reader(tarot_file);
-    
-// } 
-
+// right now printing out result for both upright and reversed
 fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: &TarotCard) -> Result<(), Box<dyn Error>> {
     let tarot_file = File::open(tarot_file)?;
     let mut rdr = csv::Reader::from_reader(tarot_file);
@@ -110,39 +112,39 @@ fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: &TarotCard) -> Result<(),
         let record = result?;   
         if record.get(0) == Some(&card.name) {
             if let Some(value) = record.get(1) {
-                println!("{}", value);
+                println!("Tarot Meaning: {}", value);
             }
         }  
     }
     Ok(())
 }
 
-fn build_card(name: String, reversed: bool) -> TarotCard {
-    TarotCard { name, reversed }
+fn build_card(name: String, reversed: bool, age: String) -> TarotCard {
+    TarotCard { name, reversed, age }
 }
 
-fn draw_card(drawn_cards: &[usize]) -> (TarotCard, usize) {
+fn draw_card(drawn_cards: &[usize], age: &str) -> (TarotCard, usize) {
     let mut card_num = rand::rng().random_range(0..78);
     while drawn_cards.contains(&card_num) {
         card_num = rand::rng().random_range(0..78);
     }
     let is_reverse = rand::rng().random_range(0..2);
     let reversed = is_reverse == 1;
-    (build_card(TAROT_CARDS[card_num].to_string(), reversed), card_num)
+    (build_card(TAROT_CARDS[card_num].to_string(), reversed, age.to_string()), card_num)
 }
 
 fn main(){
-    let tarot_file = "/Users/cullendales/Desktop/arcana/TarotCardsUpright.csv";
+    let tarot_file = "TarotCardsUpright.csv";
     let mut cards: Vec<TarotCard> = Vec::new();
     let mut drawn_cards = [0; 3];
     for i in 0..3 {
-        let (card, tarot_index) = draw_card(&drawn_cards);
+        let (card, tarot_index) = draw_card(&drawn_cards, AGE[i]);
         drawn_cards[i] = tarot_index;
         cards.push(card);
     }
 
     for card in &cards {
-        println!("{}{}", card.name, if card.reversed {" Reversed"} else {""});
+        println!("{}: {}{}", card.age, card.name, if card.reversed {" Reversed"} else {""});
         let _ = gather_meaning(tarot_file, card);
     }
 }
