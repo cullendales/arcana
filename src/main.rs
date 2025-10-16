@@ -153,7 +153,7 @@ fn interpret_patterns(cards: &Vec<TarotCard>){
         }
     }
     if count_rev > 1 {
-        println!("{} cards were reversed cards during this reading. Watch for blockages or delays.", count_rev);
+        println!("{} cards were reversed during this reading. Watch for blockages or delays.", count_rev);
     }
     if count_wnd > 1 {
         println!("Wand cards were a theme during your reading. This is a sign of strong energy, creativity, and action.");
