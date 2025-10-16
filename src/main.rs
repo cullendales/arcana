@@ -86,6 +86,18 @@ struct TarotCard {
     reversed: bool,
 }
 
+// fn interpret_patterns(cards){
+
+// }
+
+// fn gather_meaning(card: TarotCard) -> String {
+
+// } 
+
+// fn display_tarot(card: TarotCard) {
+
+// }
+
 fn build_card(name: String, reversed: bool) -> TarotCard {
     TarotCard { name, reversed }
 }
@@ -109,6 +121,6 @@ fn main(){
         cards.push(card);
     }
     for card in &cards {
-        println!("{} {}", if card.reversed {"Reversed"} else {"Upright"}, card.name);
+        println!("{}{}", card.name, if card.reversed {" Reversed"} else {""});
     }
 }
