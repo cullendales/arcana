@@ -100,6 +100,7 @@ struct TarotCard {
     age: String,
 }
 
+// prints out an image in terminal of the tarot card and flips the image if reversed is true
 fn display_tarot(card: &TarotCard) {
     let conf = Config {
         width: Some(25),
@@ -118,6 +119,7 @@ fn display_tarot(card: &TarotCard) {
         let rgba_img = dyn_img.to_rgba8();
         let rotated = rotate_about_center(&rgba_img, 3.14, Interpolation::Nearest, Rgba([255, 0, 0, 0]));
         let rotated_dyn = DynamicImage::ImageRgba8(rotated);
+        print!("\x1B[2J\x1B[1;1H");
         viuer::print(&rotated_dyn, &conf).unwrap();
     }
 }
@@ -126,17 +128,17 @@ fn display_tarot(card: &TarotCard) {
 
 // }
 
-// right now printing out result for both upright and reversed
 fn gather_meaning<P: AsRef<Path>>(tarot_file: P, card: &TarotCard) -> Result<(), Box<dyn Error>> {
     let tarot_file = File::open(tarot_file)?;
     let mut rdr = csv::Reader::from_reader(tarot_file);
+    let card_name = format!("{}{}", card.name, if card.reversed{" Reversed"} else {""});
     for result in rdr.records() {
         let record = result?;   
-        if record.get(0) == Some(&card.name) {
+        if record.get(0) == Some(&card_name) {
             if let Some(value) = record.get(1) {
                 println!("Tarot Meaning: {}", value);
             }
-        }  
+        }
     }
     Ok(())
 }
