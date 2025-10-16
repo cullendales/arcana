@@ -2,6 +2,8 @@ use rand::Rng;
 use std::error::Error;
 use std::fs::File;
 use std::path::Path;
+use viuer::{Config, print_from_file};
+
 
 const TAROT_CARDS: [&str; 78] = [
     "The Fool", 
@@ -96,9 +98,19 @@ struct TarotCard {
     age: String,
 }
 
-// fn display_tarot(card: TarotCard) {
-
-// }
+fn display_tarot(card: &TarotCard) {
+    let conf = Config {
+        width: Some(25),
+        height: Some(20),
+        x: 10,
+        y: 4,
+        ..Default::default()
+    };
+    let img_name = card.name.to_lowercase().replace(" ", "_");
+    let img_path = format!("images/{}.jpg", img_name);
+    print!("\x1B[2J\x1B[1;1H");
+    print_from_file(&img_path, &conf).expect("Image printing failed.");
+}
 
 // fn interpret_patterns(cards){
 
@@ -146,5 +158,6 @@ fn main(){
     for card in &cards {
         println!("{}: {}{}", card.age, card.name, if card.reversed {" Reversed"} else {""});
         let _ = gather_meaning(tarot_file, card);
+        display_tarot(card);
     }
 }
