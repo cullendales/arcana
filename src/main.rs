@@ -3,6 +3,9 @@ use std::error::Error;
 use std::fs::File;
 use std::path::Path;
 use viuer::{Config, print_from_file};
+use image::{DynamicImage, Rgba};
+use imageproc::geometric_transformations::{rotate_about_center, Interpolation};
+
 
 
 const TAROT_CARDS: [&str; 78] = [
@@ -108,8 +111,16 @@ fn display_tarot(card: &TarotCard) {
     };
     let img_name = card.name.to_lowercase().replace(" ", "_");
     let img_path = format!("images/{}.jpg", img_name);
-    print!("\x1B[2J\x1B[1;1H");
-    print_from_file(&img_path, &conf).expect("Image printing failed.");
+    if !card.reversed {
+        print!("\x1B[2J\x1B[1;1H");
+        print_from_file(&img_path, &conf).expect("Image printing failed.");
+    } else {
+        let dyn_img = image::open(&img_path).unwrap();
+        let rgba_img = dyn_img.to_rgba8();
+        let rotated = rotate_about_center(&rgba_img, 3.14, Interpolation::Nearest, Rgba([255, 0, 0, 0]));
+        let rotated_dyn = DynamicImage::ImageRgba8(rotated);
+        viuer::print(&rotated_dyn, &conf).unwrap();
+            }
 }
 
 // fn interpret_patterns(cards){
@@ -156,8 +167,8 @@ fn main(){
     }
 
     for card in &cards {
+        display_tarot(card);
         println!("{}: {}{}", card.age, card.name, if card.reversed {" Reversed"} else {""});
         let _ = gather_meaning(tarot_file, card);
-        display_tarot(card);
     }
 }
