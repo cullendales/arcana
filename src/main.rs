@@ -7,7 +7,6 @@ use image::{DynamicImage, Rgba};
 use imageproc::geometric_transformations::{rotate_about_center, Interpolation};
 
 
-
 const TAROT_CARDS: [&str; 78] = [
     "The Fool", 
     "The Magician", 
@@ -120,7 +119,7 @@ fn display_tarot(card: &TarotCard) {
         let rotated = rotate_about_center(&rgba_img, 3.14, Interpolation::Nearest, Rgba([255, 0, 0, 0]));
         let rotated_dyn = DynamicImage::ImageRgba8(rotated);
         viuer::print(&rotated_dyn, &conf).unwrap();
-            }
+    }
 }
 
 // fn interpret_patterns(cards){
@@ -157,7 +156,7 @@ fn draw_card(drawn_cards: &[usize], age: &str) -> (TarotCard, usize) {
 }
 
 fn main(){
-    let tarot_file = "TarotCardsUpright.csv";
+    let tarot_file = "tarot_cards.csv";
     let mut cards: Vec<TarotCard> = Vec::new();
     let mut drawn_cards = [0; 3];
     for i in 0..3 {
