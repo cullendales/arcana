@@ -86,24 +86,26 @@ struct TarotCard {
     reversed: bool,
 }
 
-
 fn build_card(name: String, reversed: bool) -> TarotCard {
     TarotCard { name, reversed }
 }
 
+fn draw_card(drawn_cards: &[usize]) -> (TarotCard, usize) {
+    let mut card_num = rand::rng().random_range(0..78);
+    while drawn_cards.contains(&card_num) {
+        card_num = rand::rng().random_range(0..78);
+    }
+    let is_reverse = rand::rng().random_range(0..2);
+    let reversed = is_reverse == 1;
+    (build_card(TAROT_CARDS[card_num].to_string(), reversed), card_num)
+}
 
 fn main(){
     let mut cards: Vec<TarotCard> = Vec::new();
     let mut drawn_cards = [0; 3];
     for i in 0..3 {
-        let mut card_num = rand::rng().random_range(0..78);
-        while drawn_cards.contains(&card_num) {
-            card_num = rand::rng().random_range(0..78);
-        }
-        drawn_cards[i] = card_num;
-        let is_reverse = rand::rng().random_range(0..2);
-        let reversed = is_reverse == 1;
-        let card = build_card(TAROT_CARDS[card_num].to_string(), reversed);
+        let (card, tarot_index) = draw_card(&drawn_cards);
+        drawn_cards[i] = tarot_index;
         cards.push(card);
     }
     for card in &cards {
