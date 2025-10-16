@@ -1,6 +1,7 @@
 # Arcana
 
-<img width="699" height="555" alt="Screenshot 2025-10-16 at 1 28 06 PM" src="https://github.com/user-attachments/assets/1d6945fb-1094-4bc3-92b1-f4f35d6f4326" />
+<img width="649" height="510" alt="Screenshot 2025-10-16 at 3 55 34 PM" src="https://github.com/user-attachments/assets/7fe69a61-fddb-4a57-b773-30dba8773419" />
+
 
 ## About
 Arcana displays tarot cards representing your past, present, and future, along with their meanings. Your fortune awaits.
