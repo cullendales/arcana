@@ -23,6 +23,6 @@ cargo run
 ```
 
 ## Notes
-Each card has its meaning displayed individually, with the program only giving some insights about all 3 cards together. Actually interpreting meanings of all 3 cards put together would require an extensive csv file as there are 456,456 possible combinations! I'm not going to write that many interpretations, are you? Anyways, interpretations are not a defined result and are up to the reader as they are with regular tarot cards.
+Each card has its meaning displayed individually, with the program only giving some insights about all 3 cards together. Actually interpreting meanings of all 3 cards put together would require an extensive csv file as there are 3,651,648 possible combinations! I'm not going to write that many interpretations, are you? Anyways, interpretations are not a defined result and are up to the reader as they are with regular tarot cards.
 
 This is my first Rust project, so please don't judge my code too much if it is unoptimized in some parts. Enjoy finding out your fortune!
