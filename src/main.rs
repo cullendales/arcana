@@ -135,22 +135,41 @@ fn interpret_patterns(cards: &Vec<TarotCard>){
     let mut count_swd = 0;
     let mut count_pnt = 0;
     let mut count_cup = 0;
+    let mut has_insight = false;
     for card in cards {
         if card.reversed {
-            count_rev += 1
+            count_rev += 1;
+            if count_rev > 1 {
+                has_insight = true;
+            }
         }
         if card.name.contains("Wands"){
-            count_wnd += 1
+            count_wnd += 1;
+            if count_wnd > 1 {
+                has_insight = true;
+            }
         }
         if card.name.contains("Swords"){
-            count_swd += 1
+            count_swd += 1;
+            if count_swd > 1 {
+                has_insight = true;
+            }
         }
         if card.name.contains("Pentacles"){
-            count_pnt += 1
+            count_pnt += 1;
+            if count_pnt > 1 {
+                has_insight = true;
+            }
         }
         if card.name.contains("Cups"){
-            count_cup += 1
+            count_cup += 1;
+            if count_cup > 1 {
+                has_insight = true;
+            }
         }
+    }
+    if has_insight {
+        println!("Insight into your cards:");
     }
     if count_rev > 1 {
         println!("{} cards were reversed during this reading. Watch for blockages or delays.", count_rev);
@@ -211,5 +230,7 @@ fn main(){
         println!("{}: {}{}", card.age, card.name, if card.reversed {" Reversed"} else {""});
         let _ = gather_meaning(tarot_file, card);
     }
+    println!("");
     interpret_patterns(&cards);
+    println!("");
 }
