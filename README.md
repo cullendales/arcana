@@ -4,7 +4,7 @@
 
 
 ## About
-Arcana displays tarot cards representing your past, present, and future, along with their meanings. Your fortune awaits.
+Arcana displays tarot cards representing your past, present, and future, along with their meanings. Your fortune awaits!
 
 ## Usage
 
